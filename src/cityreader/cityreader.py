@@ -8,15 +8,16 @@ file_name = f"{full_path}/cities.csv"
 
 
 class City:
-    def __init__(self, name, lat, lon):  # initialized method; with name, lat, lon attributes
+    # initialized method; with name, lat, lon attributes
+    def __init__(self, name, lat, lon):
         # setting the instance variables
         self.name = name
-        self.lat = lat
-        self.lon = lon
+        self.lat = float(lat)
+        self.lon = float(lon)
 
     def __str__(self):
         # returning and setting the attributes to strings
-        return f'city:{self.name}, lat:{self.lat} ,long:{self.lon}'
+        return f'{self.name}, {self.lat}, {self.lon}'
 
 
 # We have a collection of US cities with population over 750,000 stored in the
@@ -38,13 +39,17 @@ def cityreader(cities=[]):
     # TODO Implement the functionality to read from the 'cities.csv' file
     # For each city record, create a new City instance and add it to the
     # `cities` list
-    with open(file_name) as csvfile:
-        reader = csv.reader(csvfile, delimiter=',')
-        for row in reader:
-            city = City(row[0], row[3], row[4])
-            cities.append(city)
+    with open('cities.csv', 'r+', newline='') as csvfile:
+        city_reader = csv.reader(csvfile, delimiter=',')
+        line_count = 0
+        for city in city_reader:
+            if line_count == 0:
+                print(f"Column names are {', '.join(city)}")
+                line_count += 1
+            else:
+                cities.append(City(city[0], float(city[3]), float(city[4])))
 
-        return cities
+    return cities
 
 
 cityreader(cities)
